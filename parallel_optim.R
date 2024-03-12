@@ -9,27 +9,6 @@ read_data <- function(path) {
   return(out)
 }
 
-# run_optim <- function(data_list, n_cores = 4, out_dir) {
-#   if (!file.exists(out_dir)) dir.create(out_dir)
-#   if(!endsWith(out_dir, "/")) out_dir <- paste0(out_dir, "/")
-#   out <- vector("list", length(data_list))
-#   names(out) <- names(data_list)
-#   parallel::mclapply(
-#     X = seq_len(length(data_list)),
-#     FUN = function(i) {
-#       out[[i]] <- apply(data_list[[i]], 2, mean)
-#       filename <- paste0(out_dir, "optim_", names(out)[i], ".rds")
-#       saveRDS(out[[i]], file = filename)
-#     },
-#     mc.cores = n_cores
-#   )
-#   cli::cli_alert_success("Done!")
-# }
-
-
-#run_optim(data_list, n_cores = 4, out_dir = here("data/optim"))
-
- 
 run_optim <- function(data_list, n_cores = 4, out_dir, control) {
   if (!file.exists(out_dir)) dir.create(out_dir)
   if(!endsWith(out_dir, "/")) out_dir <- paste0(out_dir, "/")
@@ -89,18 +68,10 @@ control <- speec_control(
   )
 )
 
-data_list <- read_data(here("data/meta/data_lindenhonekopp_proc.csv"))  
-run_optim(test, n_cores = 4, out_dir = here("data/optim"), control = control)
-
-
-
-dat <- simulate_meta(100, 5, 100, 0, 0.5, 1, 1)
-speec(dat, control)
-lapply(test, function(x) speec(x, control))
-
+data_list <- read_data(here("data/meta/data_lindenhonekopp_proc.csv")) 
 test <- data_list[c(1, 2, 3)]
 
-speec(test, control)
+run_optim(test, n_cores = 4, out_dir = here("data/optim"), control = control)
 
 # control <- speec_control(
 #   bw = "sheather-jones",
