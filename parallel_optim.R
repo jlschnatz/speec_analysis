@@ -1,14 +1,19 @@
-library(speec)
-library(here)
-library(parallel)
-
+#' @title Read data
+#' @description Read-in meta-analysis data as list of matrices
+#' @param path Path to the file
+#' @return List of matrices
 read_data <- function(path) {
-  data_df <- read.csv(path)
+  data_df <- utils::read.csv(path)
   split_data <- split(data_df[, c("id_meta", "n", "d")], ~id_meta) 
   out <- lapply(split_data, function(x) as.matrix(x[, c("d", "n")]))
   return(out)
 }
 
+#' @title Run optimization in parallel
+#' @param data_list List of matrices (as returned by `read_data`)
+#' @param n_cores Number of cores to use 
+#' @param out_dir Directory to save the results
+#' @param control speec_control object
 run_optim <- function(data_list, n_cores = 4, out_dir, control) {
   if (!file.exists(out_dir)) dir.create(out_dir)
   if(!endsWith(out_dir, "/")) out_dir <- paste0(out_dir, "/")
@@ -27,20 +32,21 @@ run_optim <- function(data_list, n_cores = 4, out_dir, control) {
   cli::cli_alert_success("Done!")
 }
 
-control <- speec_control(
+data_list <- read_data(here::here("data/meta/data_lindenhonekopp_proc.csv")) 
+control <- speec::speec_control(
   bw = "sheather-jones",
   n_grid = c(2^7+1, 2^7+1),
   pr = c(0.005, 0.995),
-  k_sim = 1e3,
-  bounds = set_boundaries(
-    phi_n = c(1, 100),
-    mu_n = c(10, 500),
+  k_sim = 1e4,
+  bounds = speec::set_boundaries(
+    phi_n = c(1, 50),
+    mu_n = c(20, 500),
     mu_d = c(-4, 4),
-    sigma2_d = c(0.01, 3),
+    sigma2_d = c(0.01, 2),
     delta_hat = c(0.05, 3),
     w_pbs = c(0, 1)
   ),
-  start = set_start(
+  start = speec::set_start(
     phi_n = NULL,
     mu_n = NULL,
     mu_d = NULL,
@@ -53,12 +59,12 @@ control <- speec_control(
   slope_ssp = 0,
   only_pbs = TRUE,
   trace = TRUE,
-  hyperparameters = set_hyperparameters(
+  hyperparameters = speec::set_hyperparameters(
     ac_acc = 1e-4,
     nlimit = 10,
-    r = .5,
+    r = .99,
     maxgood = 200,
-    t0 = 1e3,
+    t0 = 1e4,
     dyn_rf = TRUE,
     vf = NULL,
     rf = 5,
@@ -68,48 +74,8 @@ control <- speec_control(
   )
 )
 
-data_list <- read_data(here("data/meta/data_lindenhonekopp_proc.csv")) 
-test <- data_list[c(1, 2, 3)]
+control_path <- here::here("data/optim/speec_control_settings.rds")
+saveRDS(control, file = control_path)
 
-run_optim(test, n_cores = 4, out_dir = here("data/optim"), control = control)
+run_optim(data_list, n_cores = 4, out_dir = here::here("data/optim"), control = control)
 
-# control <- speec_control(
-#   bw = "sheather-jones",
-#   n_grid = c(2^7+1, 2^7+1),
-#   pr = c(0.005, 0.995),
-#   k_sim = 1e4,
-#   bounds = set_boundaries(
-#     phi_n = c(1, 50),
-#     mu_n = c(20, 500),
-#     mu_d = c(-4, 4),
-#     sigma2_d = c(0.01, 2),
-#     delta_hat = c(0.05, 3),
-#     w_pbs = c(0, 1)
-#   ),
-#   start = set_start(
-#     phi_n = NULL,
-#     mu_n = NULL,
-#     mu_d = NULL,
-#     sigma2_d = NULL,
-#     delta_hat = NULL,
-#     w_pbs = 0.5
-#   ),
-#   alpha = 0.05,
-#   beta = 0.2,
-#   slope_ssp = 0,
-#   only_pbs = TRUE,
-#   trace = TRUE,
-#   hyperparameters = set_hyperparameters(
-#     ac_acc = 1e-4,
-#     nlimit = 10,
-#     r = .99,
-#     maxgood = 200,
-#     t0 = 1e4,
-#     dyn_rf = TRUE,
-#     vf = NULL,
-#     rf = 5,
-#     k = 1,
-#     t_min = .2,
-#     stopac = 100
-#   )
-# )
