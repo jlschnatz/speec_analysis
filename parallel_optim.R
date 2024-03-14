@@ -75,11 +75,16 @@ control <- speec::speec_control(
 )
 
 arg <- commandArgs(trailingOnly = TRUE)
+if(length(arg) == 0) {
+  n_cores = 20
+} else {
+  n_cores <- as.numeric(args[1])
+}
 
-print(arg)
-# control_path <- here::here("data/optim/speec_control_settings.rds")
-# saveRDS(control, file = control_path)
-# 
-# test <- data_list[c(1:4)]
-# run_optim(test, n_cores = 4, out_dir = here::here("data/optim"), control = control)
+
+control_path <- here::here("data/optim/speec_control_settings.rds")
+saveRDS(control, file = control_path)
+ 
+test <- data_list[c(1:4)]
+run_optim(test, n_cores = 4, out_dir = here::here("data/optim"), control = control)
 
