@@ -37,12 +37,12 @@ control <- speec::speec_control(
   bw = "sheather-jones",
   n_grid = c(2^7+1, 2^7+1),
   pr = c(0.005, 0.995),
-  k_sim = 1e4,
+  k_sim = 1e5,
   bounds = speec::set_boundaries(
-    phi_n = c(1, 50),
-    mu_n = c(20, 500),
+    phi_n = c(0.1, 15000),
+    mu_n = c(5, 15000),
     mu_d = c(-4, 4),
-    sigma2_d = c(0.01, 2),
+    sigma2_d = c(0.0005, 5)**2,
     delta_hat = c(0.05, 3),
     w_pbs = c(0, 1)
   ),
