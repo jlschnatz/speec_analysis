@@ -78,7 +78,7 @@ arg <- commandArgs(trailingOnly = TRUE)
 if(length(arg) == 0) {
   n_cores = 20
 } else {
-  n_cores <- as.numeric(args[1])
+  n_cores <- as.numeric(arg[1])
 }
 
 
