@@ -37,7 +37,7 @@ control <- speec::speec_control(
   bw = "sheather-jones",
   n_grid = c(2^7+1, 2^7+1),
   pr = c(0.005, 0.995),
-  k_sim = 1e3,
+  k_sim = 1e5,
   bounds = speec::set_boundaries(
     phi_n = c(0.1, 15000),
     mu_n = c(5, 15000),
@@ -76,7 +76,7 @@ control <- speec::speec_control(
 
 arg <- commandArgs(trailingOnly = TRUE)
 if(length(arg) == 0) {
-  n_cores = 20
+  n_cores = 12
 } else {
   n_cores <- as.numeric(arg[1])
 }
@@ -85,6 +85,6 @@ if(length(arg) == 0) {
 control_path <- here::here("data/optim/speec_control_settings.rds")
 saveRDS(control, file = control_path)
  
-test <- data_list[c(1:4)]
-run_optim(test, n_cores = 4, out_dir = here::here("data/optim"), control = control)
+test <- data_list[c(1)]
+run_optim(test, n_cores = n_cores, out_dir = here::here("data/optim"), control = control)
 
