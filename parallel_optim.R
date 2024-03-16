@@ -22,8 +22,10 @@ run_optim <- function(data_list, n_cores = 4, out_dir, control) {
   parallel::mclapply(
     X = seq_len(length(data_list)),
     FUN = function(i) {
+      cli::cli_alert_info("Processing meta-analysis {i}")
       out[[i]] <- speec::speec(data_list[[i]], speec_control = control)
       filename <- paste0(out_dir, "optim_", names(out)[i], ".rds")
+      out[[i]]$id_meta <- names(out)[i]
       saveRDS(out[[i]], file = filename)
     },
     mc.cores = n_cores,
@@ -81,10 +83,7 @@ if(length(arg) == 0) {
   n_cores <- as.numeric(arg[1])
 }
 
-
 control_path <- here::here("data/optim/speec_control_settings.rds")
 saveRDS(control, file = control_path)
- 
-test <- data_list[c(1)]
-run_optim(test, n_cores = n_cores, out_dir = here::here("data/optim"), control = control)
+run_optim(data_list, n_cores = n_cores, out_dir = here::here("data/optim"), control = control)
 
