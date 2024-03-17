@@ -34,6 +34,7 @@ run_optim <- function(data_list, n_cores = 4, out_dir, control) {
   cli::cli_alert_success("Done!")
 }
 
+set.seed(42)
 data_list <- read_data(here::here("data/meta/data_lindenhonekopp_proc.csv")) 
 control <- speec::speec_control(
   bw = "sheather-jones",
