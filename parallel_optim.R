@@ -77,6 +77,47 @@ control <- speec::speec_control(
   )
 )
 
+control <- speec::speec_control(
+  bw = "sheather-jones",
+  n_grid = c(2^7+1, 2^7+1),
+  pr = c(0.005, 0.995),
+  k_sim = 1e5,
+  bounds = speec::set_boundaries(
+    phi_n = c(0.1, 15000),
+    mu_n = c(5, 15000),
+    mu_d = c(-4, 4),
+    sigma2_d = c(0.0005, 5)**2,
+    delta_hat = c(0.05, 3),
+    w_pbs = c(0, 1)
+  ),
+  start = speec::set_start(
+    phi_n = NULL,
+    mu_n = NULL,
+    mu_d = NULL,
+    sigma2_d = NULL,
+    delta_hat = NULL,
+    w_pbs = 0.5
+  ),
+  alpha = 0.05,
+  beta = 0.2,
+  slope_ssp = 0,
+  only_pbs = TRUE,
+  trace = TRUE,
+  hyperparameters = speec::set_hyperparameters(
+    ac_acc = 1e-4,
+    r = .7,
+    maxgood = 200,
+    t0 = 1e3,
+    dyn_rf = TRUE,
+    vf = NULL,
+    rf = 1,
+    k = 1,
+    nlimit = 300,
+    t_min = 0.01,
+    stopac = 100
+  )
+)
+
 arg <- commandArgs(trailingOnly = TRUE)
 if(length(arg) == 0) {
   n_cores = 12
