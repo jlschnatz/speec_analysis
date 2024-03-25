@@ -89,7 +89,7 @@ run_optim(
   lower = c(.01, 30, -4, 0, 0),
   upper = c(1000, 15000, 4, 6, 1),
   k_sim = 1e5,
-  np = 150,
+  np = 100,
   f = 0.4,
   bs = TRUE,
   strategy = 1,
