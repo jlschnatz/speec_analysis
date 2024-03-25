@@ -39,7 +39,7 @@ de_optim <- function(emp_data, bw = "sheather-jones", n_grid = rep(2^7 +1, 2), l
     )
   )
   t2 <- Sys.time()
-  return(runtime = difftime(t2, t1), optim_results = opt)
+  return(list(runtime = difftime(t2, t1), optim_results = opt))
 }
 
 run_optim <- function(data_list, n_cores = 4, out_dir, 
