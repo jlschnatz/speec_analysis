@@ -1,7 +1,4 @@
-#' @title Read data
-#' @description Read-in meta-analysis data as list of matrices
-#' @param path Path to the file
-#' @return List of matrices
+
 read_data <- function(path) {
   data_df <- utils::read.csv(path)
   split_data <- split(data_df[, c("id_meta", "n", "d")], ~id_meta) 
@@ -11,7 +8,8 @@ read_data <- function(path) {
 
 de_optim <- function(emp_data, bw = "sheather-jones", n_grid = rep(2^7 +1, 2), lower, upper, k_sim = 1e4,
                    np = 100, f = .8, bs = TRUE, strategy = 1, itermax = 100, p = .2,
-                   c = 0, cr = .5, storepopfrom = 1, storepopfreq = 1) {
+                   c = 0, cr = .5, storepopfrom = 1, storepopfreq = 1
+                   ) {
   lims <- speec:::find_kde_limits(emp_data)
   fhat_emp <- speec:::bivariate_kde(emp_data, bw = bw, n_grid = n_grid, lims = lims)
   fn <- function(par) {
@@ -44,11 +42,6 @@ de_optim <- function(emp_data, bw = "sheather-jones", n_grid = rep(2^7 +1, 2), l
   return(runtime = difftime(t2, t1), optim_results = opt)
 }
 
-#' @title Run optimization in parallel
-#' @param data_list List of matrices (as returned by `read_data`)
-#' @param n_cores Number of cores to use 
-#' @param out_dir Directory to save the results
-#' @param control speec_control object
 run_optim <- function(data_list, n_cores = 4, out_dir, 
                       bw = "sheather-jones", n_grid = rep(2^7 +1, 2), lower, upper, k_sim = 1e4,
                       np = 100, f = .8, bs = TRUE, strategy = 1, itermax = 100, p = .2,
@@ -94,7 +87,7 @@ run_optim(
   bw = "sheather-jones",
   n_grid = rep(2^7+1, 2),
   lower = c(.01, 30, -4, 0, 0),
-  upper = c(15000, 15000, -4, 6, 1),
+  upper = c(1000, 15000, -4, 6, 1),
   k_sim = 1e5,
   np = 150,
   f = 0.4,
