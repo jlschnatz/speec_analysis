@@ -87,7 +87,7 @@ run_optim(
   bw = "sheather-jones",
   n_grid = rep(2^7+1, 2),
   lower = c(.01, 30, -4, 0, 0),
-  upper = c(1000, 15000, -4, 6, 1),
+  upper = c(1000, 15000, 4, 6, 1),
   k_sim = 1e5,
   np = 150,
   f = 0.4,
