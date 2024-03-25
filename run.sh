@@ -7,4 +7,4 @@ R -e 'if (!require("remotes")) {install.packages("remotes")}; remotes::install_v
 
 
 # Run R-Script
-Rscript --vanilla parallel_optim.R "$n_cores"
+Rscript --vanilla de_optim.R "$n_cores"
