@@ -90,10 +90,10 @@ run_optim(
   upper = c(1000, 15000, 4, 6, 1),
   k_sim = 1e4,
   np = 150,
-  f = .8,
+  f = .9,
   bs = TRUE,
   strategy = 1,
-  itermax = 300,
+  itermax = 1000,
   cr = .1,
   storepopfrom = 1,
   storepopfreq = 1
