@@ -81,7 +81,7 @@ if(length(arg) == 0) {
 set.seed(42)
 data_list <- read_data("data/meta/data_lindenhonekopp_proc.csv")
 run_optim(
-  data_list = data_list[1],
+  data_list = data_list,
   n_cores = n_cores,
   out_dir = here::here("data/optim_de"),
   bw = "sheather-jones",
