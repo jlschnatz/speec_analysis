@@ -7,7 +7,7 @@ read_data <- function(path) {
 }
 
 de_optim <- function(emp_data, bw = "sheather-jones", n_grid = rep(2^7 +1, 2), lower, upper, k_sim = 1e4,
-                   np = 100, f = .8, bs = TRUE, strategy = 1, itermax = 100, p = .2,
+                   np = 100, f = .8, bs = TRUE, strategy = 1, itermax = 100, 
                    c = 0, cr = .5, storepopfrom = 1, storepopfreq = 1
                    ) {
   lims <- speec:::find_kde_limits(emp_data)
@@ -44,8 +44,8 @@ de_optim <- function(emp_data, bw = "sheather-jones", n_grid = rep(2^7 +1, 2), l
 
 run_optim <- function(data_list, n_cores = 4, out_dir, 
                       bw = "sheather-jones", n_grid = rep(2^7 +1, 2), lower, upper, k_sim = 1e4,
-                      np = 100, f = .8, bs = TRUE, strategy = 1, itermax = 100, p = .2,
-                      c = 0, cr = .5, storepopfrom = 1, storepopfreq = 1
+                      np = 100, f = .8, bs = TRUE, strategy = 1, itermax = 100,
+                      cr = .5, storepopfrom = 1, storepopfreq = 1
                       ) {
   if (!file.exists(out_dir)) dir.create(out_dir)
   if(!endsWith(out_dir, "/")) out_dir <- paste0(out_dir, "/")
@@ -58,7 +58,7 @@ run_optim <- function(data_list, n_cores = 4, out_dir,
       out[[i]] <- de_optim(
         emp_data = data_list[[i]], bw = bw, n_grid = n_grid, 
         lower = lower, upper = upper, k_sim = k_sim, np = np, f = f, 
-        bs = bs, strategy = strategy, itermax = itermax, p = p, c = c, 
+        bs = bs, strategy = strategy, itermax = itermax, 
         cr = cr, storepopfrom = storepopfrom, storepopfreq = storepopfreq
         )
       filename <- paste0(out_dir, "optim_de", names(out)[i], ".rds")
@@ -81,22 +81,21 @@ if(length(arg) == 0) {
 set.seed(42)
 data_list <- read_data("data/meta/data_lindenhonekopp_proc.csv")
 run_optim(
-  data_list = data_list,
+  data_list = data_list[1],
   n_cores = n_cores,
   out_dir = here::here("data/optim_de"),
   bw = "sheather-jones",
   n_grid = rep(2^7+1, 2),
   lower = c(.01, 30, -4, 0, 0),
   upper = c(1000, 15000, 4, 6, 1),
-  k_sim = 1e5,
-  np = 100,
-  f = 0.4,
+  k_sim = 1e4,
+  np = 150,
+  f = .8,
   bs = TRUE,
   strategy = 1,
-  itermax = 150,
-  p = 0.8,
-  c = 0,
-  cr = 0.9,
+  itermax = 300,
+  cr = .1,
   storepopfrom = 1,
   storepopfreq = 1
 )
+
